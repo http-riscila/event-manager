@@ -9,6 +9,8 @@ const app = express();
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("CORS Origin:", origin);
+
       if (!origin || process.env.NODE_ENV !== "production") {
         return callback(null, true);
       }
@@ -21,6 +23,7 @@ app.use(
       if (allowedOrigins.indexOf(origin) !== -1) {
         return callback(null, true);
       } else {
+        console.log("CORS Blocked:", origin, "Allowed:", allowedOrigins);
         return callback(new Error("Not allowed by CORS"), false);
       }
     },
