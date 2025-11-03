@@ -8,7 +8,22 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3001",
+    origin: function (origin, callback) {
+      if (!origin || process.env.NODE_ENV !== "production") {
+        return callback(null, true);
+      }
+
+      const allowedOrigins = [
+        "https://event-manager-frontend-d0ii.onrender.com",
+        "https://event-manager-frontend.onrender.com",
+      ];
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"), false);
+      }
+    },
     credentials: true,
   })
 );
