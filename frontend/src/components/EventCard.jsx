@@ -6,16 +6,23 @@ import { useState, useEffect } from "react";
 export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
   const { user } = useUser();
   const [isSignedUp, setIsSignedUp] = useState(false);
+  const [userSignUpType, setUserSignUpType] = useState(null);
 
   useEffect(() => {
     async function checkSignUp() {
       if (user) {
         try {
-          const signUp = await getByUserId(user.id);
-          setIsSignedUp(signUp?.eventId === event.id);
+          const signUps = await getByUserId(user.id);
+          const userSignUp = signUps.find(
+            (signUp) => signUp.eventId === event.id
+          );
+
+          setIsSignedUp(!!userSignUp);
+          setUserSignUpType(userSignUp?.type || null);
         } catch (error) {
           console.error("Erro ao verificar inscrição:", error);
           setIsSignedUp(false);
+          setUserSignUpType(null);
         }
       }
     }
@@ -23,11 +30,18 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
     checkSignUp();
   }, [user, event.id]);
 
+  // É admin se o type for "ADMIN"
+  const isAdmin = userSignUpType === "ADMIN";
+
+  // Só mostra botão participar se NÃO for admin e NÃO estiver inscrito como PARTICIPANT
+  const showParticipateButton = !isAdmin && !isSignedUp;
+
   async function handleSignUp() {
     try {
       await create({ userId: user.id, eventId: event.id });
       console.log("Inscrição realizada com sucesso!");
       setIsSignedUp(true);
+      setUserSignUpType("PARTICIPANT"); // ou o tipo que você usa para participantes normais
     } catch (error) {
       console.error("Erro ao se inscrever no evento:", error);
     }
@@ -36,7 +50,6 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
   async function handleUnsignUp() {
     try {
       const signUps = await getByUserId(user.id);
-
       const signUpForThisEvent = signUps.find(
         (signUp) => signUp.eventId === event.id
       );
@@ -49,6 +62,7 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
       await remove(signUpForThisEvent.id);
       console.log("Inscrição cancelada com sucesso!");
       setIsSignedUp(false);
+      setUserSignUpType(null);
     } catch (error) {
       console.error("Erro ao cancelar inscrição:", error);
     }
@@ -63,6 +77,7 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
           onEventDeleted={onEventDeleted}
         />
       </div>
+
       <blockquote className="text-gray-500 dark:text-gray-400">
         <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
           {event.title}
@@ -74,7 +89,7 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
           </div>
           <span>|</span>
           <div className="flex flex-row gap-1 items-center">
-            <span className="material-symbols-outlined">alarm</span>
+            <span className="material-symbols-outlined">event</span>
             <p className="my-2">
               {new Date(event.date).toLocaleDateString("pt-BR", {
                 timeZone: "UTC",
@@ -84,17 +99,31 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
         </div>
       </blockquote>
 
-      <button
-        type="button"
-        onClick={isSignedUp ? handleUnsignUp : handleSignUp}
-        className={`bg-transparent text-sm font-semibold border my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer ${
-          isSignedUp
-            ? "border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-            : "border-blue-950 text-blue-950 hover:bg-blue-950 hover:text-white"
-        }`}
-      >
-        {isSignedUp ? "Cancelar Inscrição" : "Participar"}
-      </button>
+      {isAdmin && (
+        <div className="bg-transparent text-sm font-semibold border border-green-800 text-green-800 my-2 px-4 py-2 rounded-lg">
+          Você é administrador deste evento
+        </div>
+      )}
+
+      {showParticipateButton && (
+        <button
+          type="button"
+          onClick={handleSignUp}
+          className="bg-transparent text-sm font-semibold border border-blue-950 text-blue-950 hover:bg-blue-950 hover:text-white my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer"
+        >
+          Participar
+        </button>
+      )}
+
+      {isSignedUp && !isAdmin && (
+        <button
+          type="button"
+          onClick={handleUnsignUp}
+          className="bg-transparent text-sm font-semibold border border-red-500 text-red-500 hover:bg-red-500 hover:text-white my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer"
+        >
+          Cancelar Inscrição
+        </button>
+      )}
 
       <figcaption className="flex items-center justify-center">
         <div className="text-xs text-gray-500 dark:text-gray-400">

@@ -1,10 +1,17 @@
 import { Dialog } from "@headlessui/react";
 import { useState, useEffect } from "react";
-import { getByEventId } from "../services/sign-up-services";
+import {
+  getByEventId,
+  updateType,
+  checkUserIsAdmin,
+} from "../services/sign-up-services";
+import { useUser } from "../contexts/UserContext";
 
 export default function EventDetailsModal({ isOpen, onClose, event }) {
+  const { user } = useUser();
   const [atendees, setAtendees] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentUserIsAdmin, setCurrentUserIsAdmin] = useState(false);
 
   useEffect(() => {
     async function fetchAtendees() {
@@ -16,6 +23,11 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
         const data = await getByEventId(event.id);
         console.log("✅ Participantes encontrados:", data);
         setAtendees(data || []);
+
+        if (user) {
+          const isAdmin = await checkUserIsAdmin(event.id, user.id);
+          setCurrentUserIsAdmin(isAdmin);
+        }
       } catch (error) {
         console.error("❌ Erro ao buscar participantes:", error);
         setAtendees([]);
@@ -27,7 +39,37 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
     if (isOpen && event.id) {
       fetchAtendees();
     }
-  }, [event.id, isOpen]);
+  }, [event.id, isOpen, user]);
+
+  // Função para promover/rebaixar participante
+  async function handleToggleAdmin(participant) {
+    if (!currentUserIsAdmin) return;
+
+    const newType = participant.type === "ADMIN" ? "ATTENDEE" : "ADMIN";
+    const action = newType === "ADMIN" ? "promover" : "rebaixar";
+
+    try {
+      await updateType(participant.id, newType);
+
+      setAtendees((prev) =>
+        prev.map((p) => (p.id === participant.id ? { ...p, type: newType } : p))
+      );
+
+      console.log(
+        `✅ ${participant.user?.name} ${
+          action === "promover" ? "promovido" : "rebaixado"
+        } com sucesso!`
+      );
+    } catch (error) {
+      console.error(`❌ Erro ao ${action} participante:`, error);
+      alert(`Erro ao ${action} participante. Tente novamente.`);
+    }
+  }
+
+  // Não permite que o criador original seja rebaixado
+  const isOriginalCreator = (participant) => {
+    return event.createdBy === participant.userId;
+  };
 
   if (!event) return null;
 
@@ -87,6 +129,11 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
           <div className="border-t pt-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Participantes ({loading ? "..." : atendees?.length || 0})
+              {currentUserIsAdmin && (
+                <span className="text-sm font-normal text-gray-500 ml-2">
+                  (Você é administrador)
+                </span>
+              )}
             </h3>
 
             {loading ? (
@@ -98,21 +145,40 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
                 {atendees.map((participant) => (
                   <div
                     key={participant.id}
-                    className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    className="flex items-center justify-between gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
                   >
-                    <span className="material-symbols-outlined text-gray-600 dark:text-gray-400">
-                      account_circle
-                    </span>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {participant.user?.name || "Usuário desconhecido"}
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {participant.type === "ADMIN"
-                          ? "Organizador"
-                          : "Participante"}
-                      </p>
+                    <div className="flex items-center gap-3">
+                      <span className="material-symbols-outlined text-gray-600 dark:text-gray-400">
+                        account_circle
+                      </span>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {participant.user?.name || "Usuário desconhecido"}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {participant.type === "ADMIN"
+                            ? "Organizador"
+                            : "Participante"}
+                        </p>
+                      </div>
                     </div>
+
+                    {currentUserIsAdmin &&
+                      participant.userId !== user?.id &&
+                      !isOriginalCreator(participant) && (
+                        <button
+                          onClick={() => handleToggleAdmin(participant)}
+                          className={`text-xs font-medium px-3 py-1 rounded border transition-colors cursor-pointer ${
+                            participant.type === "ADMIN"
+                              ? "bg-red-100 text-red-800 border-red-300 hover:bg-red-200"
+                              : "bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200"
+                          }`}
+                        >
+                          {participant.type === "ADMIN"
+                            ? "Rebaixar"
+                            : "Promover"}
+                        </button>
+                      )}
                   </div>
                 ))}
               </div>

@@ -49,12 +49,22 @@ async function getByEventId(eventId) {
 }
 
 async function update(id, type) {
-  return await prisma.signUp.update({
-    where: { id },
-    data: {
-      type: type,
-    },
-  });
+  try {
+    const result = await prisma.signUp.update({
+      where: { id },
+      data: { type },
+    });
+
+    console.log("🎉 [SERVICE] Update bem-sucedido:", result);
+    return result;
+  } catch (error) {
+    console.error("💥 [SERVICE] Erro no update do banco:", error);
+    console.error("📋 [SERVICE] Detalhes do Prisma:", {
+      code: error.code,
+      meta: error.meta,
+    });
+    throw error; // ← Importante: re-lançar o erro
+  }
 }
 
 async function remove(id) {

@@ -45,12 +45,26 @@ async function getByEventId(eventId) {
   }
 }
 
-async function partiallyUpdate(atendeeId, signUpData) {
+async function updateType(atendeeId, newType) {
   try {
-    const response = await api.patch(`/api/sign-up/${atendeeId}`, signUpData);
+    const response = await api.put(`api/sign-up/${atendeeId}`, {
+      type: newType,
+    });
     return response.data;
   } catch (error) {
-    console.error("Erro ao atualizar participante:", error);
+    console.error("Erro ao atualizar tipo de participante:", error);
+    throw error;
+  }
+}
+
+async function checkUserIsAdmin(eventId, userId) {
+  try {
+    const signUps = await getByEventId(eventId);
+    const userSignUp = signUps.find((signUp) => signUp.userId === userId);
+    return userSignUp?.type === "ADMIN";
+  } catch (error) {
+    console.error("Erro ao verificar admin:", error);
+    return false;
   }
 }
 
@@ -69,6 +83,7 @@ export {
   getById,
   getByUserId,
   getByEventId,
-  partiallyUpdate,
+  updateType,
+  checkUserIsAdmin,
   remove,
 };
