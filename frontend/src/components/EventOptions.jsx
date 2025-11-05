@@ -2,7 +2,7 @@ import { Popover } from "@headlessui/react";
 import { useState } from "react";
 import EditEventModal from "./EditEventModal.jsx";
 import DeleteEventModal from "./DeleteEventModal.jsx";
-import EventDetailsModal from "./EventDetailsModal.jsx"; // ← Adicione esta importação
+import EventDetailsModal from "./EventDetailsModal.jsx";
 import { useUser } from "../contexts/UserContext.jsx";
 
 export default function EventOptions({
@@ -13,9 +13,8 @@ export default function EventOptions({
   const { user } = useUser();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false); // ← Adicione esta linha
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  // Verifica se o usuário é o criador do evento ou admin
   const isOwner = user?.id === event.createdBy;
 
   return (
@@ -67,14 +66,12 @@ export default function EventOptions({
         </Popover.Panel>
       </Popover>
 
-      {/* Modal de Detalhes */}
       <EventDetailsModal
         isOpen={isDetailsModalOpen}
         onClose={() => setIsDetailsModalOpen(false)}
         event={event}
       />
 
-      {/* Modal de Edição */}
       <EditEventModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -82,7 +79,6 @@ export default function EventOptions({
         onEventUpdated={onEventUpdated}
       />
 
-      {/* Modal de Exclusão */}
       <DeleteEventModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}

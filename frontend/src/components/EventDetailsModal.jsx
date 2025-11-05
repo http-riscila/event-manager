@@ -19,9 +19,7 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
 
       setLoading(true);
       try {
-        console.log("📥 Buscando participantes para evento:", event.id);
         const data = await getByEventId(event.id);
-        console.log("✅ Participantes encontrados:", data);
         setAtendees(data || []);
 
         if (user) {
@@ -29,7 +27,7 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
           setCurrentUserIsAdmin(isAdmin);
         }
       } catch (error) {
-        console.error("❌ Erro ao buscar participantes:", error);
+        console.error("Erro ao buscar participantes:", error);
         setAtendees([]);
       } finally {
         setLoading(false);
@@ -41,7 +39,6 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
     }
   }, [event.id, isOpen, user]);
 
-  // Função para promover/rebaixar participante
   async function handleToggleAdmin(participant) {
     if (!currentUserIsAdmin) return;
 
@@ -54,19 +51,11 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
       setAtendees((prev) =>
         prev.map((p) => (p.id === participant.id ? { ...p, type: newType } : p))
       );
-
-      console.log(
-        `✅ ${participant.user?.name} ${
-          action === "promover" ? "promovido" : "rebaixado"
-        } com sucesso!`
-      );
     } catch (error) {
-      console.error(`❌ Erro ao ${action} participante:`, error);
-      alert(`Erro ao ${action} participante. Tente novamente.`);
+      console.error(`Erro ao ${action} participante:`, error);
     }
   }
 
-  // Não permite que o criador original seja rebaixado
   const isOriginalCreator = (participant) => {
     return event.createdBy === participant.userId;
   };

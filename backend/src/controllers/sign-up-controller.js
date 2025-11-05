@@ -77,39 +77,19 @@ async function updateSignUp(req, res) {
     const { id } = req.params;
     const signUpData = req.body;
 
-    console.log("🔄 [UPDATE] Iniciando atualização do sign-up:", {
-      id,
-      body: signUpData,
-    });
-
-    // Verifique se o sign-up existe
     const signUp = await getById(Number(id));
-    console.log("📋 [UPDATE] Sign-up encontrado:", signUp);
 
     if (!signUp) {
-      console.log("❌ [UPDATE] Sign-up não encontrado para id:", id);
       return res.status(404).json({ message: "sign up not found" });
     }
 
-    console.log("⚡ [UPDATE] Chamando service update com:", {
-      id: Number(id),
-      type: signUpData.type,
-    });
-
     const updatedSignUp = await update(Number(id), signUpData.type);
-    console.log("✅ [UPDATE] Sign-up atualizado com sucesso:", updatedSignUp);
 
     res.status(200).json(updatedSignUp);
   } catch (error) {
-    console.error("💥 [UPDATE] Erro ao atualizar sign-up:", error);
-    console.error("🔧 [UPDATE] Detalhes do erro:", {
-      message: error.message,
-      code: error.code,
-      meta: error.meta,
-    });
     res.status(500).json({
       error: "Internal Server Error",
-      message: error.message, // ← Mostre a mensagem real
+      message: error.message,
     });
   }
 }

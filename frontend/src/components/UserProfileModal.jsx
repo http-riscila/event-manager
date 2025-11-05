@@ -60,7 +60,6 @@ export default function UserProfileModal({ isOpen, onClose }) {
 
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="mx-auto max-w-md w-full rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl">
-          {/* Header */}
           <div className="flex justify-between items-start mb-6">
             <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white">
               Meu Perfil
@@ -73,9 +72,7 @@ export default function UserProfileModal({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Informações do Usuário */}
           <div className="space-y-4">
-            {/* Nome */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Nome
@@ -96,7 +93,6 @@ export default function UserProfileModal({ isOpen, onClose }) {
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Email
@@ -117,7 +113,6 @@ export default function UserProfileModal({ isOpen, onClose }) {
               )}
             </div>
 
-            {/* ID (somente leitura) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 ID do Usuário
@@ -128,7 +123,6 @@ export default function UserProfileModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* Botões */}
           <div className="flex flex-col gap-3 mt-6 pt-4 border-t">
             {isEditing ? (
               <div className="flex gap-2">
@@ -154,7 +148,6 @@ export default function UserProfileModal({ isOpen, onClose }) {
               </button>
             )}
 
-            {/* Botão Excluir Conta */}
             <button
               onClick={handleDeleteAccount}
               className="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors cursor-pointer"

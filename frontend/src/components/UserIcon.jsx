@@ -31,7 +31,6 @@ export default function UserIcon() {
         </Popover.Panel>
       </Popover>
 
-      {/* Modal do Perfil */}
       <UserProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}

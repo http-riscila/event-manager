@@ -24,12 +24,12 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.location.trim() || !formData.date) {
-      alert("Título, local e data são obrigatórios");
+      console.log("Título, local e data são obrigatórios");
       return;
     }
 
     if (formData.date <= new Date()) {
-      alert("A data do evento deve ser futura");
+      console.log("A data do evento deve ser futura");
       return;
     }
 
@@ -43,7 +43,6 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
         location: formData.location,
         userId: user.id,
       };
-      console.log("Dados do evento a serem enviados:", eventData);
 
       const response = await create(eventData);
 
@@ -61,7 +60,6 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
       onClose();
     } catch (error) {
       console.error("Erro ao criar evento:", error);
-      alert("Erro ao criar evento");
     }
   };
 
@@ -75,7 +73,6 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
 
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="mx-auto max-w-md w-full rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl">
-          {/* Header */}
           <div className="flex justify-between items-start mb-6">
             <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white">
               Adicionar Evento
@@ -88,9 +85,7 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
             </button>
           </div>
 
-          {/* Formulário */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Título */}
             <div>
               <label
                 htmlFor="title"
@@ -110,7 +105,6 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
               />
             </div>
 
-            {/* Descrição */}
             <div>
               <label
                 htmlFor="description"
@@ -148,7 +142,6 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
               />
             </div>
 
-            {/* Localização */}
             <div>
               <label
                 htmlFor="location"
@@ -168,7 +161,6 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
               />
             </div>
 
-            {/* Botões */}
             <div className="flex gap-3 pt-4 border-t border-gray-300">
               <button
                 type="button"

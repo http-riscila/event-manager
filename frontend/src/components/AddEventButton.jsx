@@ -1,9 +1,7 @@
-// components/AddEventButton.jsx
 import { useState } from "react";
 import AddEventModal from "./AddEventModal.jsx";
 
 export default function AddEventButton({ onEventCreated }) {
-  // ← Recebe a prop
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   return (

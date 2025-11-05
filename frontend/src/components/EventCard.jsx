@@ -30,10 +30,8 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
     checkSignUp();
   }, [user, event.id]);
 
-  // É admin se o type for "ADMIN"
   const isAdmin = userSignUpType === "ADMIN";
 
-  // Só mostra botão participar se NÃO for admin e NÃO estiver inscrito como PARTICIPANT
   const showParticipateButton = !isAdmin && !isSignedUp;
 
   async function handleSignUp() {
@@ -41,7 +39,7 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
       await create({ userId: user.id, eventId: event.id });
       console.log("Inscrição realizada com sucesso!");
       setIsSignedUp(true);
-      setUserSignUpType("PARTICIPANT"); // ou o tipo que você usa para participantes normais
+      setUserSignUpType("PARTICIPANT");
     } catch (error) {
       console.error("Erro ao se inscrever no evento:", error);
     }

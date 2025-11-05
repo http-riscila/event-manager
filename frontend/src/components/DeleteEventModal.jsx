@@ -1,4 +1,3 @@
-// components/DeleteEventModal.jsx
 import { Dialog } from "@headlessui/react";
 import { remove } from "../services/event-services";
 

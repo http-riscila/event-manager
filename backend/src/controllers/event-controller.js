@@ -10,20 +10,13 @@ import {
 async function createEvent(req, res) {
   try {
     const eventData = req.body;
-    console.log("Dados recebidos no controller:", eventData);
-
     const newEvent = await create(eventData);
 
-    console.log("Evento criado com sucesso:", newEvent);
     res.status(201).json(newEvent);
   } catch (error) {
-    console.error("Erro detalhado no controller createEvent:", error);
-    console.error("Mensagem do erro:", error.message);
-    console.error("Stack trace:", error.stack);
-
     res.status(500).json({
       error: "Internal Server Error",
-      details: error.message, // ← Adicione esta linha para ver o erro real
+      details: error.message,
     });
   }
 }
@@ -75,13 +68,7 @@ async function partiallyUpdateEvent(req, res) {
     const { id } = req.params;
     const eventData = req.body;
 
-    console.log("📝 Atualizando evento ID:", id);
-    console.log("📦 Dados recebidos:", eventData);
-
     const updatedEvent = await partiallyUpdate(Number(id), eventData);
-
-    console.log("✅ Evento atualizado retornado:", updatedEvent);
-    console.log("👤 CreatedByUser no retorno:", updatedEvent.createdByUser);
 
     if (!updatedEvent) {
       return res.status(404).json({ message: "Event not found" });
@@ -89,7 +76,6 @@ async function partiallyUpdateEvent(req, res) {
 
     res.status(200).json(updatedEvent);
   } catch (error) {
-    console.error("❌ Erro detalhado no updateEvent:", error);
     res.status(500).json({
       error: "Internal Server Error",
       details: error.message,

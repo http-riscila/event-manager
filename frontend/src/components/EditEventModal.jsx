@@ -40,7 +40,7 @@ export default function EditEventModal({
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.location.trim() || !formData.date) {
-      alert("Título, local e data são obrigatórios");
+      console.log("Título, local e data são obrigatórios");
       return;
     }
 
@@ -49,7 +49,7 @@ export default function EditEventModal({
     today.setHours(0, 0, 0, 0);
 
     if (selectedDate <= today) {
-      alert("A data do evento deve ser futura");
+      console.log("A data do evento deve ser futura");
       return;
     }
 
@@ -61,26 +61,17 @@ export default function EditEventModal({
         location: formData.location,
       };
 
-      console.log("📤 Enviando dados para atualização:", eventData);
-
       const response = await update(event.id, eventData);
-      console.log("✅ Resposta da atualização:", response);
-
-      console.log("🔄 Chamando onEventUpdated...");
-      console.log("📞 onEventUpdated existe?", !!onEventUpdated);
 
       if (onEventUpdated) {
         onEventUpdated(response);
-        console.log("🎉 onEventUpdated chamado com sucesso!");
       } else {
-        console.warn("⚠️ onEventUpdated não foi passado como prop");
+        console.warn("onEventUpdated callback is not provided");
       }
 
       onClose();
-      alert("Evento atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar evento:", error);
-      alert("Erro ao atualizar evento");
     }
   };
 
@@ -94,7 +85,6 @@ export default function EditEventModal({
 
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="mx-auto max-w-md w-full rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl">
-          {/* Header */}
           <div className="flex justify-between items-start mb-6">
             <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white">
               Editar Evento
@@ -107,9 +97,7 @@ export default function EditEventModal({
             </button>
           </div>
 
-          {/* Formulário */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Título */}
             <div>
               <label
                 htmlFor="title"
@@ -129,7 +117,6 @@ export default function EditEventModal({
               />
             </div>
 
-            {/* Descrição */}
             <div>
               <label
                 htmlFor="description"
@@ -148,7 +135,6 @@ export default function EditEventModal({
               />
             </div>
 
-            {/* Data */}
             <div>
               <label
                 htmlFor="date"
@@ -168,7 +154,6 @@ export default function EditEventModal({
               />
             </div>
 
-            {/* Localização */}
             <div>
               <label
                 htmlFor="location"
@@ -188,7 +173,6 @@ export default function EditEventModal({
               />
             </div>
 
-            {/* Botões */}
             <div className="flex gap-3 pt-4 border-t">
               <button
                 type="button"
