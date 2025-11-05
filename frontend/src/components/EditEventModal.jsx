@@ -101,7 +101,7 @@ export default function EditEventModal({
             </Dialog.Title>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
             >
               <span className="material-symbols-outlined">close</span>
             </button>
@@ -199,7 +199,7 @@ export default function EditEventModal({
               </button>
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-900 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Salvar Alterações
               </button>

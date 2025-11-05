@@ -179,7 +179,7 @@ export default function CreateEventModal({ isOpen, onClose, onEventCreated }) {
               </button>
               <button
                 type="submit"
-                className="cursor-pointer flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="cursor-pointer flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-900 transition-colors disabled:opacity-50"
               >
                 Criar Evento
               </button>

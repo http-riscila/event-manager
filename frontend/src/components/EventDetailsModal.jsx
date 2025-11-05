@@ -170,8 +170,8 @@ export default function EventDetailsModal({ isOpen, onClose, event }) {
                           onClick={() => handleToggleAdmin(participant)}
                           className={`text-xs font-medium px-3 py-1 rounded border transition-colors cursor-pointer ${
                             participant.type === "ADMIN"
-                              ? "bg-red-100 text-red-800 border-red-300 hover:bg-red-200"
-                              : "bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200"
+                              ? "bg-red-100 text-red-800 border-red-300 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:border-red-700 dark:hover:bg-red-800"
+                              : "bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700 dark:hover:bg-blue-800"
                           }`}
                         >
                           {participant.type === "ADMIN"

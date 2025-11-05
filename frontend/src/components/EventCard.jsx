@@ -100,7 +100,8 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
       </blockquote>
 
       {isAdmin && (
-        <div className="bg-transparent text-sm font-semibold border border-green-800 text-green-800 my-2 px-4 py-2 rounded-lg">
+        <div className="bg-transparent text-sm font-semibold border border-green-800 text-green-800 dark:border-green-400 dark:text-green-400 my-2 px-4 py-2 rounded-lg">
+          {" "}
           Você é administrador deste evento
         </div>
       )}
@@ -109,7 +110,12 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
         <button
           type="button"
           onClick={handleSignUp}
-          className="bg-transparent text-sm font-semibold border border-blue-950 text-blue-950 hover:bg-blue-950 hover:text-white my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer"
+          className="bg-transparent text-sm font-semibold border 
+           border-blue-950 text-blue-950 
+           hover:bg-blue-950 hover:text-white
+           dark:border-blue-300 dark:text-blue-300
+           dark:hover:bg-blue-300 dark:hover:text-gray-800
+           my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer"
         >
           Participar
         </button>
@@ -119,7 +125,7 @@ export default function EventCard({ event, onEventUpdated, onEventDeleted }) {
         <button
           type="button"
           onClick={handleUnsignUp}
-          className="bg-transparent text-sm font-semibold border border-red-500 text-red-500 hover:bg-red-500 hover:text-white my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer"
+          className="bg-transparent text-sm font-semibold border border-red-500 text-red-500 hover:bg-red-500 hover:text-white dark:border-red-400 dark:text-red-400 dark:hover:bg-red-400 dark:hover:text-gray-900 my-2 px-4 py-2 rounded-lg transition-all ease-in-out duration-500 cursor-pointer"
         >
           Cancelar Inscrição
         </button>
